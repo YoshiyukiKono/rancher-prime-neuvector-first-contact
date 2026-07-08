@@ -2,6 +2,115 @@
 
 この章では、Rancher Prime UI から NeuVector をインストールした流れを記録します。
 
+## Rancher Server URL の確認（推奨）
+
+NeuVector Prime Extension は、Rancher Server の `server-url` 設定を利用して
+Rancher API と連携します。
+
+ローカル環境では、この設定がブラウザ用 URL (`https://rancher.localhost` など)
+になっている場合があります。
+
+ブラウザからはアクセスできますが、NeuVector Controller Pod からは
+`localhost` は Pod 自身を意味するため、Rancher Server に到達できません。
+
+そのため、Prime Extension をインストールする前に、
+`server-url` をクラスタ内部から到達可能な Service URL に設定しておくことを推奨します。
+
+### 現在の設定を確認
+
+```bash
+kubectl get settings.management.cattle.io server-url -o yaml
+```
+
+例：
+
+```yaml
+value: https://rancher.localhost
+```
+
+### Service URL に変更
+
+```bash
+kubectl patch settings.management.cattle.io server-url \
+  --type merge \
+  -p '{"value":"https://rancher.cattle-system.svc"}'
+```
+
+変更後に確認します。
+
+```bash
+kubectl get settings.management.cattle.io server-url -o yaml
+```
+
+期待される結果：
+
+```yaml
+value: https://rancher.cattle-system.svc
+```
+
+---
+
+### NeuVector インストール後の確認
+
+Helm Values に同じ URL が反映されていることを確認します。
+
+```bash
+helm -n cattle-neuvector-system get values neuvector -o yaml | grep -A10 cattle
+```
+
+期待される結果：
+
+```yaml
+global:
+  cattle:
+    url: https://rancher.cattle-system.svc
+```
+
+---
+
+### Controller の接続状態確認
+
+Controller ログに認証エラーが出ていないことを確認します。
+
+```bash
+kubectl -n cattle-neuvector-system \
+logs deploy/neuvector-controller-pod --tail=100
+```
+
+正常時は、
+
+```
+OrchConnStatus: connected
+```
+
+などのメッセージが表示され、
+`Authentication failed` や `connection refused` が出力されないことを確認します。
+
+---
+
+### NeuVector Dashboard の確認
+
+Rancher UI の
+
+```
+Cluster
+└── NeuVector
+    └── Dashboard
+```
+
+を開き、
+
+- Dashboard が表示されること
+- Security Score が表示されること
+- Authentication failed が表示されないこと
+
+を確認します。
+
+### Note
+
+server-url は Rancher UI へブラウザがアクセスする URL とは用途が異なります。
+Prime Extension は Controller Pod から Rancher API へ接続するため、クラスタ内部から到達可能な URL を設定することが重要です。ローカル検証環境では https://rancher.cattle-system.svc が適しています。
+
 ## 1. NeuVector Extension のインストール
 
 Rancher Prime の `Extensions` 画面で NeuVector を選択します。
