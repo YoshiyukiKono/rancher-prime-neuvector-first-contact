@@ -1,0 +1,2 @@
+NAME                   CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)   
+lima-rancher-desktop   766m         12%      7924Mi          49%         

@@ -1,0 +1,3 @@
+cattle-neuvector-system     neuvector                   neuvector                   109.0.3+up2.10.3                                                         neuvector                   2                 deployed
+cattle-neuvector-system     neuvector-crd               neuvector-crd               109.0.3+up2.10.3                                                         neuvector-crd               2                 deployed
+cattle-ui-plugin-system     neuvector-ui-ext            neuvector-ui-ext            2.1.9                                                                    neuvector-ui-ext            1                 deployed

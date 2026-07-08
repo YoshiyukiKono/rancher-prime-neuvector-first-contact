@@ -1,0 +1,363 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    generation: 5
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-controller-pod
+    namespace: cattle-neuvector-system
+    resourceVersion: "248463"
+    uid: be693513-f8e8-440b-98ba-844fcabd51a5
+  spec:
+    minReadySeconds: 60
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: neuvector-controller-pod
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          checksum/controller-secret: e4563372b6e2f45b814a7f7d1d4d3a0f027a064bd0a3bc1c6270eb0d6d208485
+        labels:
+          app: neuvector-controller-pod
+          release: neuvector
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - neuvector-controller-pod
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        containers:
+        - env:
+          - name: CTRL_SERVER_PORT
+            value: "10443"
+          - name: CLUSTER_JOIN_ADDR
+            value: neuvector-svc-controller.cattle-neuvector-system
+          - name: CLUSTER_ADVERTISED_ADDR
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: CLUSTER_BIND_ADDR
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: RANCHER_CLUSTER_NAME
+            value: local
+          - name: RANCHER_SSO
+            value: "1"
+          - name: RANCHER_EP
+            value: https://rancher.cattle-system.svc
+          - name: AUTO_INTERNAL_CERT
+            value: "1"
+          image: registry.rancher.com/rancher/neuvector-controller:5.5.3
+          imagePullPolicy: IfNotPresent
+          name: neuvector-controller-pod
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: 18500
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            runAsUser: 0
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/config
+            name: config-volume
+            readOnly: true
+          - mountPath: /etc/neuvector/prime/compliance/
+            name: prime-config
+            readOnly: true
+          - mountPath: /etc/neuvector/certs/ssl-cert.key
+            name: cert
+            readOnly: true
+            subPath: ssl-cert.key
+          - mountPath: /etc/neuvector/certs/ssl-cert.pem
+            name: cert
+            readOnly: true
+            subPath: ssl-cert.pem
+          - mountPath: /etc/neuvector/certs/internal/
+            name: internal-cert-dir
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - /usr/local/bin/upgrader
+          - create-upgrader-job
+          env:
+          - name: OVERRIDE_CHECKSUM
+            value: 02ba977fb558b4b19be2005f954e40f26ce206ccc8de9cb1ef5845ac46d36213
+          image: registry.rancher.com/rancher/neuvector-controller:5.5.3
+          imagePullPolicy: IfNotPresent
+          name: init
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - image: registry.rancher.com/rancher/neuvector-compliance-config:1.0.14
+          imagePullPolicy: IfNotPresent
+          name: prime-config-container
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /usr/share
+            name: prime-config
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: neuvector
+        serviceAccountName: neuvector
+        terminationGracePeriodSeconds: 300
+        volumes:
+        - name: config-volume
+          projected:
+            defaultMode: 420
+            sources:
+            - configMap:
+                name: neuvector-init
+                optional: true
+            - secret:
+                name: neuvector-init
+                optional: true
+            - secret:
+                name: neuvector-secret
+                optional: true
+        - emptyDir: {}
+          name: prime-config
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: neuvector-controller-secret
+        - emptyDir:
+            sizeLimit: 50Mi
+          name: internal-cert-dir
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-07-08T01:12:12Z"
+      lastUpdateTime: "2026-07-08T02:01:43Z"
+      message: ReplicaSet "neuvector-controller-pod-84757f8b44" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-07-08T02:23:00Z"
+      lastUpdateTime: "2026-07-08T02:23:00Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 5
+    readyReplicas: 1
+    replicas: 1
+    terminatingReplicas: 0
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    generation: 4
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-manager-pod
+    namespace: cattle-neuvector-system
+    resourceVersion: "247937"
+    uid: a51833f2-54ae-4ead-831b-4c1ca041eb06
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: neuvector-manager-pod
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          checksum/manager-secret: b65b35ad6fa37aad8c95c9f84fa10fa83b6bd3c27a495f2edd2941b4c2d63dae
+          kubectl.kubernetes.io/restartedAt: "2026-07-08T11:05:04+09:00"
+        labels:
+          app: neuvector-manager-pod
+          release: neuvector
+      spec:
+        containers:
+        - env:
+          - name: CTRL_SERVER_PORT
+            value: "10443"
+          - name: MANAGER_SERVER_PORT
+            value: "8443"
+          - name: CTRL_SERVER_IP
+            value: neuvector-svc-controller.cattle-neuvector-system
+          image: registry.rancher.com/rancher/neuvector-manager:5.5.3
+          imagePullPolicy: IfNotPresent
+          name: neuvector-manager-pod
+          ports:
+          - containerPort: 8443
+            name: http
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/neuvector/certs/ssl-cert.key
+            name: cert
+            readOnly: true
+            subPath: ssl-cert.key
+          - mountPath: /etc/neuvector/certs/ssl-cert.pem
+            name: cert
+            readOnly: true
+            subPath: ssl-cert.pem
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: neuvector
+        serviceAccountName: neuvector
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: neuvector-manager-secret
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-07-08T01:12:12Z"
+      lastUpdateTime: "2026-07-08T02:08:59Z"
+      message: ReplicaSet "neuvector-manager-pod-76cdbf54d9" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-07-08T02:21:42Z"
+      lastUpdateTime: "2026-07-08T02:21:42Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    terminatingReplicas: 0
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    generation: 2
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-scanner-pod
+    namespace: cattle-neuvector-system
+    resourceVersion: "248869"
+    uid: b2eedd05-7b96-465d-bd74-9aabc02a0cd8
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: neuvector-scanner-pod
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        labels:
+          app: neuvector-scanner-pod
+      spec:
+        containers:
+        - env:
+          - name: CLUSTER_JOIN_ADDR
+            value: neuvector-svc-controller.cattle-neuvector-system
+          - name: AUTO_INTERNAL_CERT
+            value: "1"
+          image: registry.rancher.com/rancher/neuvector-scanner:6
+          imagePullPolicy: Always
+          name: neuvector-scanner-pod
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/neuvector/certs/internal/
+            name: internal-cert-dir
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: neuvector
+        serviceAccountName: neuvector
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            sizeLimit: 50Mi
+          name: internal-cert-dir
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-07-08T01:12:12Z"
+      lastUpdateTime: "2026-07-08T01:16:02Z"
+      message: ReplicaSet "neuvector-scanner-pod-5d5d6449d4" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-07-08T02:24:33Z"
+      lastUpdateTime: "2026-07-08T02:24:33Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    terminatingReplicas: 0
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

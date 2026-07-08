@@ -1,0 +1,105 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      deprecated.daemonset.template.generation: "1"
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-enforcer-pod
+    namespace: cattle-neuvector-system
+    resourceVersion: "247955"
+    uid: 8f47a168-64c8-417f-928b-0268f22ea7c9
+  spec:
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: neuvector-enforcer-pod
+    template:
+      metadata:
+        labels:
+          app: neuvector-enforcer-pod
+          release: neuvector
+      spec:
+        containers:
+        - env:
+          - name: CLUSTER_JOIN_ADDR
+            value: neuvector-svc-controller.cattle-neuvector-system
+          - name: CLUSTER_ADVERTISED_ADDR
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: CLUSTER_BIND_ADDR
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: AUTO_INTERNAL_CERT
+            value: "1"
+          image: registry.rancher.com/rancher/neuvector-enforcer:5.5.3
+          imagePullPolicy: IfNotPresent
+          name: neuvector-enforcer-pod
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /lib/modules
+            name: modules-vol
+            readOnly: true
+          - mountPath: /var/nv_debug
+            name: nv-debug
+          - mountPath: /etc/neuvector/certs/internal/
+            name: internal-cert-dir
+        dnsPolicy: ClusterFirst
+        hostPID: true
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: neuvector
+        serviceAccountName: neuvector
+        terminationGracePeriodSeconds: 1200
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/etcd
+        volumes:
+        - hostPath:
+            path: /lib/modules
+            type: ""
+          name: modules-vol
+        - hostPath:
+            path: /var/nv_debug
+            type: ""
+          name: nv-debug
+        - emptyDir:
+            sizeLimit: 50Mi
+          name: internal-cert-dir
+    updateStrategy:
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+      type: RollingUpdate
+  status:
+    currentNumberScheduled: 1
+    desiredNumberScheduled: 1
+    numberAvailable: 1
+    numberMisscheduled: 0
+    numberReady: 1
+    observedGeneration: 1
+    updatedNumberScheduled: 1
+kind: List
+metadata:
+  resourceVersion: ""

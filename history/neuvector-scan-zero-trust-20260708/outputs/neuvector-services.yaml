@@ -1,0 +1,149 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-service-webui
+    namespace: cattle-neuvector-system
+    resourceVersion: "235266"
+    uid: 8e51a1d0-fa3b-433b-9514-b127c1b9487c
+  spec:
+    clusterIP: 10.43.229.226
+    clusterIPs:
+    - 10.43.229.226
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: manager
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      app: neuvector-manager-pod
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-svc-admission-webhook
+    namespace: cattle-neuvector-system
+    resourceVersion: "235268"
+    uid: 06e07edf-ef9b-4ead-82e1-f9b3268c573c
+  spec:
+    clusterIP: 10.43.134.46
+    clusterIPs:
+    - 10.43.134.46
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: admission-webhook
+      port: 443
+      protocol: TCP
+      targetPort: 20443
+    selector:
+      app: neuvector-controller-pod
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-svc-controller
+    namespace: cattle-neuvector-system
+    resourceVersion: "235264"
+    uid: 1559efd4-2ac1-468d-bd83-20bf2453acb5
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: cluster-tcp-18300
+      port: 18300
+      protocol: TCP
+      targetPort: 18300
+    - name: cluster-tcp-18301
+      port: 18301
+      protocol: TCP
+      targetPort: 18301
+    - name: cluster-udp-18301
+      port: 18301
+      protocol: UDP
+      targetPort: 18301
+    selector:
+      app: neuvector-controller-pod
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: neuvector
+      meta.helm.sh/release-namespace: cattle-neuvector-system
+    creationTimestamp: "2026-07-08T01:12:12Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      chart: neuvector-109.0.3_up2.10.3
+      release: neuvector
+    name: neuvector-svc-crd-webhook
+    namespace: cattle-neuvector-system
+    resourceVersion: "235270"
+    uid: d46810cb-79a6-49de-a2df-29c49b5b38aa
+  spec:
+    clusterIP: 10.43.190.10
+    clusterIPs:
+    - 10.43.190.10
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: crd-webhook
+      port: 443
+      protocol: TCP
+      targetPort: 30443
+    selector:
+      app: neuvector-controller-pod
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
