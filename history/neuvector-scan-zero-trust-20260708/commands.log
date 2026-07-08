@@ -1,0 +1,89 @@
+# Rancher Prime Demo Workloads Light / NeuVector Scan & Zero Trust Hands-on
+# Environment
+kubectl config current-context
+# rancher-desktop
+
+kubectl get nodes
+# NAME                   STATUS   ROLES           AGE   VERSION
+# lima-rancher-desktop   Ready    control-plane   47h   v1.35.6+k3s1
+
+# Deploy demo workloads
+kubectl apply -k k8s
+# namespace/demo-light created
+# service/backend-httpbin created
+# service/frontend-nginx created
+# deployment.apps/backend-httpbin created
+# deployment.apps/debug-curl created
+# deployment.apps/frontend-nginx created
+# deployment.apps/traffic-generator created
+
+kubectl get all -n demo-light
+kubectl get pods -n demo-light -o wide
+# backend-httpbin, debug-curl, frontend-nginx, traffic-generator are Running.
+
+# Basic connectivity
+kubectl -n demo-light exec deploy/debug-curl -- curl -s http://backend-httpbin:8000/get
+kubectl -n demo-light exec deploy/debug-curl -- curl -s http://frontend-nginx
+
+# Browser access by port-forward
+kubectl -n demo-light port-forward svc/frontend-nginx 8080:80
+# Browser: http://localhost:8080
+
+kubectl -n demo-light port-forward svc/backend-httpbin 8000:8000
+# Browser: http://localhost:8000
+# Browser: http://localhost:8000/get
+# Browser: http://localhost:8000/ip
+# Browser: http://localhost:8000/headers
+# Browser: http://localhost:8000/status/404
+
+# Normal traffic script
+chmod +x ./scripts/generate-manual-traffic.sh
+./scripts/generate-manual-traffic.sh
+# frontend-nginx returned nginx welcome page.
+# backend-httpbin /get returned JSON.
+# backend-httpbin /headers returned JSON.
+
+# Monitor mode manual operation
+# NeuVector UI: Policy > Groups > nv.debug-curl.demo-light > Switch Mode
+# Network Policy Mode: Monitor
+# Process Profile Mode: Monitor
+# Baseline Profile Setting: Zero Drift
+
+kubectl exec -it -n demo-light deploy/debug-curl -- sh
+ps
+env
+id
+hostname
+curl http://backend-httpbin:8000/get
+curl http://frontend-nginx
+exit
+# Security Events showed Process profile rule violation with Action: Alert.
+
+# Protect mode
+# NeuVector UI: Policy > Groups > nv.debug-curl.demo-light > Switch Mode
+# Network Policy Mode: Protect
+# Process Profile Mode: Protect
+# Baseline Profile Setting: Zero Drift
+
+./scripts/generate-manual-traffic.sh
+# Normal curl traffic succeeded.
+
+kubectl exec -it -n demo-light deploy/debug-curl -- sh
+# command terminated with exit code 137
+# Security Events showed process "sh" Action: Deny.
+
+kubectl -n demo-light exec deploy/debug-curl -- ps
+# Succeeded.
+
+kubectl -n demo-light exec deploy/debug-curl -- env
+# Succeeded.
+
+kubectl -n demo-light exec deploy/debug-curl -- id
+# command terminated with exit code 137
+# Security Events showed process violation / Deny for disallowed process.
+
+kubectl -n demo-light exec deploy/debug-curl -- hostname
+# Succeeded.
+
+kubectl -n demo-light exec deploy/debug-curl -- curl -sS http://backend-httpbin:8000/get
+# Succeeded.
