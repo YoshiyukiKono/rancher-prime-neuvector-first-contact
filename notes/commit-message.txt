@@ -1,0 +1,7 @@
+Initial NeuVector first-contact lab documentation
+
+- Document Rancher Prime Extension vs Helm Chart workflow
+- Add NeuVector architecture notes
+- Record Rancher Desktop 6GB/2CPU OOMKilled behavior
+- Add local demo resource tuning: 16GB/6CPU, controller=1, scanner=1
+- Add screenshots and command outputs from the lab session

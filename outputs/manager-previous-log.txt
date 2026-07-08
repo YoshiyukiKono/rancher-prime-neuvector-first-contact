@@ -1,0 +1,4 @@
+FIPS mode not detected. Using default security configuration.
+2026-07-08 01:41:28,565|INFO |MANAGER|apache.pekko.event.slf4j.Slf4jLogger(applyOrElse:117): Slf4jLogger started
+2026-07-08 01:41:31,644|INFO |MANAGER|com.neu.web.Rest$($init$:81): Starting server in HTTPS mode (MANAGER_SSL=on).
+2026-07-08 01:41:31,879|INFO |MANAGER|com.neu.web.Rest$($init$$$anonfun$3:95): Server is listening on /[0:0:0:0:0:0:0:0]:8443

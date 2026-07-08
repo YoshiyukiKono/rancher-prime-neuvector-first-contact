@@ -1,0 +1,109 @@
+yoshiyukikono@YoshiyukinoMacBook-Pro github % rdctl set --help
+Update selected fields in the Rancher Desktop UI and restart the backend.
+
+Usage:
+  rdctl set [flags]
+
+Flags:
+      --application.admin-access                                        enable privileged operations
+      --application.auto-start                                          start app when logging in
+      --application.debug                                               generate more verbose logging
+      --application.hide-notification-icon                              don't show notification icon
+      --application.path-management-strategy string                     update PATH to include ~/.rd/bin (allowed values: [manual, rcfiles])
+      --application.start-in-background                                 start app without window
+      --application.telemetry.enabled                                   allow collection of anonymous statistics
+      --application.updater.enabled                                     automatically update to the latest release
+      --application.window.quit-on-close                                terminate app when the main window is closed
+      --container-engine.allowed-images.enabled                         only allow images to be pulled that match the allowed patterns
+      --container-engine.moby-storage-driver string                     override Moby storage driver selection (allowed values: [classic, snapshotter, auto])
+      --container-engine.name string                                    set engine (allowed values: [containerd, docker, moby])
+      --containers.namespace string                                     select only namespaces from this namespace (containerd only)
+      --containers.show-all                                             show system containers on Containers page
+      --diagnostics.connectivity.interval int                           Number of milliseconds before polling for network access; set this to zero to disable background connectivity checking
+      --diagnostics.connectivity.timeout int                            Number of milliseconds to wait before timing out
+      --diagnostics.show-muted                                          unhide muted diagnostics
+      --experimental.container-engine.web-assembly.enabled              enable support for containerd-wasm shims
+      --experimental.kubernetes.options.spinkube                        install spin operator
+      --experimental.virtual-machine.disk-size string                   desired size of the disk; changing this setting will not shrink existing disks (example: 10GiB)
+      --experimental.virtual-machine.mount.9p.cache-mode string         (allowed values: [none, loose, fscache, mmap])
+      --experimental.virtual-machine.mount.9p.msize-in-kib int          maximum packet size
+      --experimental.virtual-machine.mount.9p.protocol-version string   (allowed values: [9p2000, 9p2000.u, 9p2000.L])
+      --experimental.virtual-machine.mount.9p.security-model string     (allowed values: [passthrough, mapped-xattr, mapped-file, none])
+      --experimental.virtual-machine.ssh-port-forwarder                 use SSH for port forwarding instead of gRPC
+  -h, --help                                                            help for set
+      --images.namespace string                                         select only images from this namespace (containerd only)
+      --images.show-all                                                 show system images on Images page
+      --kubernetes.enabled                                              run Kubernetes
+      --kubernetes.options.flannel                                      use flannel networking; disable to install your own CNI
+      --kubernetes.options.traefik                                      install and run traefik
+      --kubernetes.port int                                             apiserver port
+      --kubernetes.version string                                       choose which version of Kubernetes to run
+      --port-forwarding.include-kubernetes-services                     show Kubernetes system services on Port Forwarding page
+      --virtual-machine.memory-in-gb int                                reserved RAM size
+      --virtual-machine.mount.type string                               how directories are shared; 9p is experimental (allowed values: [reverse-sshfs, 9p, virtiofs])
+      --virtual-machine.number-cpus int                                 reserved number of CPUs
+      --virtual-machine.type string                                     (allowed values: [qemu, vz])
+      --virtual-machine.use-rosetta
+
+Global Flags:
+      --config-path string   config file (default /Users/yoshiyukikono/Library/Application Support/rancher-desktop/rd-engine.json)
+      --host string          default is 127.0.0.1; most useful for WSL
+      --password string      overrides the password setting in the config file
+      --port int             overrides the port setting in the config file
+      --user string          overrides the user setting in the config file
+      --verbose              Be verbose
+yoshiyukikono@YoshiyukinoMacBook-Pro github % rdctl set
+Error: set command: no settings to change were given
+Usage:
+  rdctl set [flags]
+
+Flags:
+      --application.admin-access                                        enable privileged operations
+      --application.auto-start                                          start app when logging in
+      --application.debug                                               generate more verbose logging
+      --application.hide-notification-icon                              don't show notification icon
+      --application.path-management-strategy string                     update PATH to include ~/.rd/bin (allowed values: [manual, rcfiles])
+      --application.start-in-background                                 start app without window
+      --application.telemetry.enabled                                   allow collection of anonymous statistics
+      --application.updater.enabled                                     automatically update to the latest release
+      --application.window.quit-on-close                                terminate app when the main window is closed
+      --container-engine.allowed-images.enabled                         only allow images to be pulled that match the allowed patterns
+      --container-engine.moby-storage-driver string                     override Moby storage driver selection (allowed values: [classic, snapshotter, auto])
+      --container-engine.name string                                    set engine (allowed values: [containerd, docker, moby])
+      --containers.namespace string                                     select only namespaces from this namespace (containerd only)
+      --containers.show-all                                             show system containers on Containers page
+      --diagnostics.connectivity.interval int                           Number of milliseconds before polling for network access; set this to zero to disable background connectivity checking
+      --diagnostics.connectivity.timeout int                            Number of milliseconds to wait before timing out
+      --diagnostics.show-muted                                          unhide muted diagnostics
+      --experimental.container-engine.web-assembly.enabled              enable support for containerd-wasm shims
+      --experimental.kubernetes.options.spinkube                        install spin operator
+      --experimental.virtual-machine.disk-size string                   desired size of the disk; changing this setting will not shrink existing disks (example: 10GiB)
+      --experimental.virtual-machine.mount.9p.cache-mode string         (allowed values: [none, loose, fscache, mmap])
+      --experimental.virtual-machine.mount.9p.msize-in-kib int          maximum packet size
+      --experimental.virtual-machine.mount.9p.protocol-version string   (allowed values: [9p2000, 9p2000.u, 9p2000.L])
+      --experimental.virtual-machine.mount.9p.security-model string     (allowed values: [passthrough, mapped-xattr, mapped-file, none])
+      --experimental.virtual-machine.ssh-port-forwarder                 use SSH for port forwarding instead of gRPC
+  -h, --help                                                            help for set
+      --images.namespace string                                         select only images from this namespace (containerd only)
+      --images.show-all                                                 show system images on Images page
+      --kubernetes.enabled                                              run Kubernetes
+      --kubernetes.options.flannel                                      use flannel networking; disable to install your own CNI
+      --kubernetes.options.traefik                                      install and run traefik
+      --kubernetes.port int                                             apiserver port
+      --kubernetes.version string                                       choose which version of Kubernetes to run
+      --port-forwarding.include-kubernetes-services                     show Kubernetes system services on Port Forwarding page
+      --virtual-machine.memory-in-gb int                                reserved RAM size
+      --virtual-machine.mount.type string                               how directories are shared; 9p is experimental (allowed values: [reverse-sshfs, 9p, virtiofs])
+      --virtual-machine.number-cpus int                                 reserved number of CPUs
+      --virtual-machine.type string                                     (allowed values: [qemu, vz])
+      --virtual-machine.use-rosetta
+
+Global Flags:
+      --config-path string   config file (default /Users/yoshiyukikono/Library/Application Support/rancher-desktop/rd-engine.json)
+      --host string          default is 127.0.0.1; most useful for WSL
+      --password string      overrides the password setting in the config file
+      --port int             overrides the port setting in the config file
+      --user string          overrides the user setting in the config file
+      --verbose              Be verbose
+
+yoshiyukikono@YoshiyukinoMacBook-Pro github % 

@@ -1,0 +1,6 @@
+Last State:     Terminated
+  Reason:       OOMKilled
+  Exit Code:    137
+Ready:          False
+Restart Count:  8
+QoS Class:      BestEffort

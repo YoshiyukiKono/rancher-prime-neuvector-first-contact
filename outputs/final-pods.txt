@@ -1,0 +1,6 @@
+NAME                                        READY   STATUS      RESTARTS        AGE
+neuvector-cert-upgrader-job-lh96p           0/1     Completed   0               26m
+neuvector-controller-pod-84757f8b44-97lxl   1/1     Running     2 (3m51s ago)   20m
+neuvector-enforcer-pod-phcl7                1/1     Running     2 (3m57s ago)   72m
+neuvector-manager-pod-76cdbf54d9-pztbt      1/1     Running     2 (4m1s ago)    19m
+neuvector-scanner-pod-5d5d6449d4-w6psh      1/1     Running     0               14s

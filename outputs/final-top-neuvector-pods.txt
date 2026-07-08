@@ -1,0 +1,5 @@
+NAME                                        CPU(cores)   MEMORY(bytes)
+neuvector-controller-pod-84757f8b44-97lxl   7m           1939Mi
+neuvector-enforcer-pod-phcl7                24m          1041Mi
+neuvector-manager-pod-76cdbf54d9-pztbt      4m           665Mi
+neuvector-scanner-pod-5d5d6449d4-w6psh      1065m        3322Mi

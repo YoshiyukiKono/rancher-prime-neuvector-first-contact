@@ -1,0 +1,25 @@
+# Local demo values for Rancher Desktop
+#
+# This is not a full values.yaml. It records the important overrides used
+# to keep NeuVector stable on Rancher Desktop.
+
+controller:
+  replicas: 1
+
+cve:
+  scanner:
+    replicas: 1
+
+# Keep these enabled for first-contact learning.
+manager:
+  enabled: true
+
+enforcer:
+  enabled: true
+
+cve:
+  scanner:
+    enabled: true
+    replicas: 1
+  updater:
+    enabled: true
